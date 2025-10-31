@@ -1,37 +1,29 @@
 import streamlit as st
-from database import init_db
-from auth import show_register, show_login
+from auth import show_login
+from profile import show_profile
+from class_detail import show_class_detail
+from quiz_detail import show_quiz_detail
 
-# Initialize DB
-init_db()
-st.title("Teacher Quiz Tracker App")
+st.set_page_config(page_title="Quiz Manager", layout="wide")
 
-# --- Session state defaults ---
+# --- SESSION STATE INIT ---
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-if "teacher_id" not in st.session_state:
-    st.session_state.teacher_id = None
-if "auth_tab" not in st.session_state:
-    st.session_state.auth_tab = "Register"
 if "selected_class_id" not in st.session_state:
     st.session_state.selected_class_id = None
-if "show_class_expander" not in st.session_state:
-    st.session_state.show_class_expander = False
+if "selected_quiz_id" not in st.session_state:
+    st.session_state.selected_quiz_id = None
 
-# --- Main logic ---
-if st.session_state.logged_in:
-    # Show profile or class detail
-    from profile import show_profile
-    show_profile()
-
+# --- MAIN ROUTING LOGIC ---
+if not st.session_state.logged_in:
+    show_login()
 else:
-    # --- Auth Tabs ---
-    auth_tabs = st.tabs(["Register", "Login"])
-
-    with auth_tabs[0]:
-        st.session_state.auth_tab = "Register"
-        show_register()
-
-    with auth_tabs[1]:
-        st.session_state.auth_tab = "Login"
-        show_login()
+    # If quiz selected → show quiz detail
+    if st.session_state.selected_quiz_id:
+        show_quiz_detail(st.session_state.selected_quiz_id)
+    # Else if class selected → show class detail
+    elif st.session_state.selected_class_id:
+        show_class_detail(st.session_state.selected_class_id)
+    # Else → show profile
+    else:
+        show_profile()
