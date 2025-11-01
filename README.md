@@ -1,0 +1,1 @@
+L'objectif du projet est de permettre a des professeur de gerer les notes de leurs classes. Les fonctionalités principales sont l'inscription, connexion, la creation de classes et l'import des élèves via un fichier csv, la création de quiz pour ces classes et l'import des notes des élèves via un fichier csv.
